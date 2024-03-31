@@ -1,7 +1,7 @@
 ﻿ArrowHeadType myArrowHeadType;
 ArrowFletchingType myArrowFletchingType;
 int myArrowLength;
-Arrow myArrow = null;
+Arrow? myArrow = null;
 
 Console.WriteLine("Welcome to Vin Fletcher's Arrow Shop!\n");
 
@@ -56,8 +56,8 @@ if (myOrderType == OrderType.Premade) {
     myArrow = new Arrow(myArrowHeadType, myArrowFletchingType, myArrowLength);
 }
 
-Console.WriteLine($"You have ordered an arrow with a {myArrow.ArrowHeadType} arrowhead, {myArrow.ArrowFletchingType} fletching, and a length of {myArrow.ArrowLength} cm.");
-Console.WriteLine($"The cost of this arrow is {myArrow.GetCost()} gold.");
+Console.WriteLine($"You have ordered an arrow with a {myArrow?.ArrowHeadType} arrowhead, {myArrow?.ArrowFletchingType} fletching, and a length of {myArrow?.ArrowLength} cm.");
+Console.WriteLine($"The cost of this arrow is {myArrow?.GetCost()} gold.");
 
 void WriteErrorText(string text) {
     Console.ForegroundColor = ConsoleColor.Red;
