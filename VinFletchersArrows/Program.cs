@@ -36,9 +36,9 @@ void WriteErrorText(string text) {
 }
 
 class Arrow {
-    private ArrowHeadType ArrowHeadType { get; init; }
-    private ArrowFletchingType ArrowFletchingType { get; init; }
-    private int ArrowLength { get; init; }
+    public ArrowHeadType ArrowHeadType { get; init; }
+    public ArrowFletchingType ArrowFletchingType { get; init; }
+    public int ArrowLength { get; init; }
 
     public Arrow(ArrowHeadType arrowHeadType, ArrowFletchingType arrowFletchingType, int arrowLength) {
         if (arrowLength < 60 || arrowLength > 100) {
