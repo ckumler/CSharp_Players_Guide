@@ -15,15 +15,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThePoint", "ThePoint\ThePoi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheColor", "TheColor\TheColor.csproj", "{1295FCBD-1FFA-4050-B9F3-F1B93029C847}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheCard", "TheCard\TheCard.csproj", "{FEBB75BB-EF95-4C3B-AB23-1977FC791EF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheCard", "TheCard\TheCard.csproj", "{FEBB75BB-EF95-4C3B-AB23-1977FC791EF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheLockedDoor", "TheLockedDoor\TheLockedDoor.csproj", "{3F627BE4-F81C-4243-B329-4F325EB22EA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheLockedDoor", "TheLockedDoor\TheLockedDoor.csproj", "{3F627BE4-F81C-4243-B329-4F325EB22EA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThePasswordValidator", "ThePasswordValidator\ThePasswordValidator.csproj", "{D995239F-4A2D-4D7A-992A-1DAA05A6300D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThePasswordValidator", "ThePasswordValidator\ThePasswordValidator.csproj", "{D995239F-4A2D-4D7A-992A-1DAA05A6300D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe", "TicTacToe\TicTacToe.csproj", "{23EE0EAF-CF33-4D47-88FC-25B3430452C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe", "TicTacToe\TicTacToe.csproj", "{23EE0EAF-CF33-4D47-88FC-25B3430452C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackingInventory", "PackingInventory\PackingInventory.csproj", "{32FFF5CF-F606-48D3-A47D-3C662CF78211}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PackingInventory", "PackingInventory\PackingInventory.csproj", "{32FFF5CF-F606-48D3-A47D-3C662CF78211}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheOldRobot", "TheOldRobot\TheOldRobot.csproj", "{41813566-3BD5-46A1-BBA7-7F84790AA196}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{32FFF5CF-F606-48D3-A47D-3C662CF78211}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32FFF5CF-F606-48D3-A47D-3C662CF78211}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32FFF5CF-F606-48D3-A47D-3C662CF78211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41813566-3BD5-46A1-BBA7-7F84790AA196}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41813566-3BD5-46A1-BBA7-7F84790AA196}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41813566-3BD5-46A1-BBA7-7F84790AA196}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41813566-3BD5-46A1-BBA7-7F84790AA196}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
