@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe", "TicTacToe\TicT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PackingInventory", "PackingInventory\PackingInventory.csproj", "{32FFF5CF-F606-48D3-A47D-3C662CF78211}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheOldRobot", "TheOldRobot\TheOldRobot.csproj", "{41813566-3BD5-46A1-BBA7-7F84790AA196}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheOldRobot", "TheOldRobot\TheOldRobot.csproj", "{41813566-3BD5-46A1-BBA7-7F84790AA196}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomCoordinates", "RoomCoordinates\RoomCoordinates.csproj", "{3311C251-8446-421A-B90A-645D24E1C594}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,10 @@ Global
 		{41813566-3BD5-46A1-BBA7-7F84790AA196}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41813566-3BD5-46A1-BBA7-7F84790AA196}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41813566-3BD5-46A1-BBA7-7F84790AA196}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3311C251-8446-421A-B90A-645D24E1C594}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3311C251-8446-421A-B90A-645D24E1C594}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3311C251-8446-421A-B90A-645D24E1C594}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3311C251-8446-421A-B90A-645D24E1C594}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
