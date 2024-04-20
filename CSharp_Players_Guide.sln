@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hunting_The_Manticore", "Hunting_The_Manticore\Hunting_The_Manticore.csproj", "{AFD0A47C-E943-4A06-93A7-6CDA5D9C9C6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BB_HuntingTheManticore", "Hunting_The_Manticore\BB_HuntingTheManticore.csproj", "{AFD0A47C-E943-4A06-93A7-6CDA5D9C9C6A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulasTest", "SimulasTest\SimulasTest.csproj", "{1A98D30C-1AB8-43D0-A3FB-B27BEB53D562}"
 EndProject
@@ -27,11 +27,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PackingInventory", "Packing
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheOldRobot", "TheOldRobot\TheOldRobot.csproj", "{41813566-3BD5-46A1-BBA7-7F84790AA196}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomCoordinates", "RoomCoordinates\RoomCoordinates.csproj", "{3311C251-8446-421A-B90A-645D24E1C594}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoomCoordinates", "RoomCoordinates\RoomCoordinates.csproj", "{3311C251-8446-421A-B90A-645D24E1C594}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarPreperations", "WarPreperations\WarPreperations.csproj", "{D2123B7A-A054-4F37-91BE-0A71F129D0F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarPreperations", "WarPreperations\WarPreperations.csproj", "{D2123B7A-A054-4F37-91BE-0A71F129D0F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColoredItems", "ColoredItems\ColoredItems.csproj", "{DB6A2796-AF34-4340-89BE-9892974073C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColoredItems", "ColoredItems\ColoredItems.csproj", "{DB6A2796-AF34-4340-89BE-9892974073C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
