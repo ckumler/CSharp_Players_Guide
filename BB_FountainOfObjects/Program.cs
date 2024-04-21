@@ -7,7 +7,9 @@ game.Run();
 
 public class Game
 {
-    public Map map = Map.CreateNewMap(MapType.VeryBig, new Coordinate(0, 0), new Coordinate(0, 2));
+    public bool playerEscaped = false;
+
+    public Map map = Map.CreateNewMap(MapType.Medium, new Coordinate(0, 0), new Coordinate(0, 2));
     public Player player = new Player();
     public InputController inputController = new InputController();
 
@@ -15,52 +17,95 @@ public class Game
     {
         TextRenderer.ActionText("Welcome to The Fountain of Objects!");
         TextRenderer.EndOfRound();
-        while (true)
+        DrawMap();
+        DisplayDetails();
+        while (!playerEscaped)
         {
-            DrawMap();
-            DisplayDetails();
+
             ICommand command = inputController.GetCommand();
             Console.Clear();
             command.Execute(this);
             TextRenderer.EndOfRound();
+            DrawMap();
+            DisplayDetails();
         }
 
     }
 
     private void DisplayDetails()
     {
-        TextRenderer.WriteLine($"You are at coordinate {player.currentPosition}.");
+        TextRenderer.WriteLine($"You are at coordinate {player.currentPosition}.\n");
+
+        //TODO: Create Sensing class and supporting types
+        if(player.currentPosition.X == map.entrancePos.X && player.currentPosition.Y == map.entrancePos.Y)
+        {
+            if (!map.fountainIsActivated)
+            {
+                TextRenderer.ActionText($"You see light in this room coming from outside the cavern. This is the entrance.");
+            }
+            else
+            {
+                //TODO: Create a better way to detect if game is over
+                TextRenderer.ActionText($"The Fountain of Objects has been reactivated, and you have escaped with your life!\nYou win!");
+                playerEscaped = true;
+            }
+        }
+       
+        if (player.currentPosition.X == map.fountainPos.X && player.currentPosition.Y == map.fountainPos.Y)
+        {
+            if (!map.fountainIsActivated) 
+            {
+                TextRenderer.ActionText($"You hear water dripping in this room. The Fountain of Objects is here!");
+            }
+            else
+            {
+                TextRenderer.ActionText($"You hear the rushing waters from the Fountain of Objects. It has been reactivated!");
+            }
+        }
+        
+        Console.WriteLine();
     }
 
     private void DrawMap()
     {
-        for (int i = map.mapRows-1; i >= 0; i--)
+        for (int i = map.mapRows - 1; i >= 0; i--)
         {
-
-            for (int ia = 0; ia < map.mapCols+1; ia++)
+            //Draw top border
+            for (int ia = 0; ia < map.mapCols + 1; ia++)
             {
                 TextRenderer.DrawMap("+---");
             }
             Console.WriteLine();
 
-
+            //Draw cells
             TextRenderer.DrawMap("|");
             for (int j = 0; j < map.mapCols; j++)
             {
-
-
-                if (i == player.currentPosition.Y && j == player.currentPosition.X) { TextRenderer.DrawMapAccent($"{i},{j}"); } else { TextRenderer.DrawMapAccent($"   "); }
-                
-
-
+                if (i == player.currentPosition.Y && j == player.currentPosition.X)
+                {
+                    TextRenderer.DrawMapAccent($"{i},{j}");
+                }
+                else if (i == map.entrancePos.Y && j == map.entrancePos.X)
+                {
+                    TextRenderer.DrawMapAccent($"{i},{j}");
+                }
+                else if (i == map.fountainPos.Y && j == map.fountainPos.X)
+                {
+                    TextRenderer.DrawMapAccent($"{i},{j}");
+                }
+                else
+                {
+                    TextRenderer.DrawMapAccent($"   ");
+                }
                 TextRenderer.DrawMap($"|");
+
                 //if end of row, draw row identifier
-                if (j == map.mapCols - 1){TextRenderer.DrawMapAccent($" {i} ");}
+                if (j == map.mapCols - 1) { TextRenderer.DrawMapAccent($" {i} "); }
 
                 //if at the end of last row, draw footer
-                if (i == 0 && j == map.mapCols - 1) { DrawFooter(); }                
+                if (i == 0 && j == map.mapCols - 1) { DrawFooter(); }
             }
-            
+
             Console.WriteLine();
         }
         Console.WriteLine();
@@ -69,7 +114,7 @@ public class Game
     private void DrawFooter()
     {
         Console.WriteLine();
-        for (int ia = 0; ia < map.mapCols+1; ia++)
+        for (int ia = 0; ia < map.mapCols + 1; ia++)
         {
             TextRenderer.DrawMap("+---");
         }
@@ -77,7 +122,7 @@ public class Game
         TextRenderer.DrawMap("|");
         for (int i = 0; i < map.mapCols; i++)
         {
-            TextRenderer.DrawMapAccent($@"{TextRenderer.CenterAlign($"{i}",3)}");
+            TextRenderer.DrawMapAccent($@"{TextRenderer.CenterAlign($"{i}", 3)}");
             TextRenderer.DrawMap("|");
         }
     }
@@ -110,7 +155,11 @@ public class InputController
             string[]? input = Console.ReadLine()?.ToLower().Split(" ") ?? new string[1] { "empty" };
             if (input.Length <= 1 || input.Length >= 3)
             {
+                TextRenderer.ErrorText("Please input a proper action");
                 continue;
+            }
+            else if (input[0].ToLower() == "enable" && input[1].ToLower() == "fountain") {
+                command = new ActivateFountainCommand();
             }
             else
             {
@@ -123,8 +172,12 @@ public class InputController
                             command = new MoveCommand(commandDirection);
                             break;
                         default:
+                            TextRenderer.ErrorText("Please input a proper action");
                             continue;
                     }
+                } else {
+                    TextRenderer.ErrorText("Please input a proper action");
+                    continue;
                 }
             }
         }
@@ -183,6 +236,25 @@ public class MoveCommand(Direction direction) : ICommand
 
 }
 
+public class ActivateFountainCommand() : ICommand
+{
+    public void Execute(Game game)
+    {
+        if(game.player.currentPosition.X == game.map.fountainPos.X && game.player.currentPosition.Y == game.map.fountainPos.Y)
+        {
+            if (game.map.fountainIsActivated) 
+            {
+                TextRenderer.ErrorText($"There fountain is already activated."); 
+            } else {
+                game.map.fountainIsActivated = true;
+                TextRenderer.ActionText($"You have activated the fountain.");
+            }
+        } else {
+            TextRenderer.ErrorText($"The fountain is not in this room.");
+        }
+    }
+}
+
 public interface ICommand
 {
     void Execute(Game game);
@@ -208,6 +280,9 @@ public class Map
     private Room[,] rooms;
     public int mapRows;
     public int mapCols;
+    public Coordinate entrancePos;
+    public Coordinate fountainPos;
+    public bool fountainIsActivated;
 
 
     public Map(int rows, int cols)
@@ -215,6 +290,7 @@ public class Map
         mapRows = rows;
         mapCols = cols;
         rooms = new Room[rows, cols];
+        fountainIsActivated = false;
     }
 
     public RoomType GetRoomTypeAt(Coordinate coord)
@@ -224,18 +300,28 @@ public class Map
 
     public static Map CreateNewMap(MapType mapType, Coordinate entranceCoord, Coordinate fountainCoord)
     {
+        const int SMALL_SIZE = 4;
+        const int MEDIUM_SIZE = 6;
+        const int LARGE_SIZE = 8;
+        const int VERY_LARGE_SIZE = 10;
         Map map;
 
         switch (mapType)
         {
-            case MapType.Default:
-                map = new Map(4, 4);
+            case MapType.Small:
+                map = new Map(SMALL_SIZE, SMALL_SIZE);
                 break;
-            case MapType.VeryBig:
-                map = new Map(10,10);
+            case MapType.Medium:
+                map = new Map(MEDIUM_SIZE, MEDIUM_SIZE);
+                break;
+            case MapType.Large:
+                map = new Map(LARGE_SIZE, LARGE_SIZE);
+                break;
+            case MapType.VeryLarge:
+                map = new Map(VERY_LARGE_SIZE, VERY_LARGE_SIZE);
                 break;
             default:
-                map = new Map(4, 4);
+                map = new Map(MEDIUM_SIZE, MEDIUM_SIZE);
                 break;
         }
 
@@ -249,11 +335,13 @@ public class Map
                 {
                     //Console.WriteLine($"{i},{j}: Entrance");
                     map.rooms[i, j] = new Room(new Coordinate(i, j), RoomType.Entrance);
+                    map.entrancePos = new Coordinate(i, j);
                 }
                 if (i == fountainCoord.X && j == fountainCoord.Y)
                 {
                     //Console.WriteLine($"{i},{j}: FountainRoom");
                     map.rooms[i, j] = new Room(new Coordinate(i, j), RoomType.FountainRoom);
+                    map.fountainPos = new Coordinate(i, j);
                 }
                 else
                 {
@@ -269,7 +357,7 @@ public class Map
 
     public bool CheckIfIsOnMap(Coordinate coord)
     {
-        if (coord.X >= 0 && coord.Y >= 0 && coord.X <= rooms.GetLength(0)-1 && coord.Y <= rooms.GetLength(1)-1)
+        if (coord.X >= 0 && coord.Y >= 0 && coord.X <= rooms.GetLength(0) - 1 && coord.Y <= rooms.GetLength(1) - 1)
         {
             return true;
         }
@@ -292,7 +380,10 @@ public class Map
 public enum MapType
 {
     Default,
-    VeryBig
+    Small,
+    Medium,
+    Large,
+    VeryLarge,
 }
 public class Room
 {
