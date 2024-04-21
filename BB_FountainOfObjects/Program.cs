@@ -29,7 +29,7 @@ public class Game
             DrawMap();
             DisplayDetails();
         }
-
+        Console.ReadKey();
     }
 
     private void DisplayDetails()
