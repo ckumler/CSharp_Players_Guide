@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarPreperations", "WarPrepe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ColoredItems", "ColoredItems\ColoredItems.csproj", "{DB6A2796-AF34-4340-89BE-9892974073C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BB_FountainOfObjects", "BB_FountainOfObjects\BB_FountainOfObjects.csproj", "{BBBE4C7A-D59A-47F1-B29D-618A0095E6FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{DB6A2796-AF34-4340-89BE-9892974073C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB6A2796-AF34-4340-89BE-9892974073C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB6A2796-AF34-4340-89BE-9892974073C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBBE4C7A-D59A-47F1-B29D-618A0095E6FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBBE4C7A-D59A-47F1-B29D-618A0095E6FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBBE4C7A-D59A-47F1-B29D-618A0095E6FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBBE4C7A-D59A-47F1-B29D-618A0095E6FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
