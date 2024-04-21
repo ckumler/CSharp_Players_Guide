@@ -7,17 +7,20 @@ game.Run();
 
 public class Game
 {
-    public Map map = Map.CreateNewMap(MapType.Default, new Coordinate(0, 0), new Coordinate(0, 2));
+    public Map map = Map.CreateNewMap(MapType.VeryBig, new Coordinate(0, 0), new Coordinate(0, 2));
     public Player player = new Player();
     public InputController inputController = new InputController();
 
     public void Run()
     {
+        TextRenderer.ActionText("Welcome to The Fountain of Objects!");
+        TextRenderer.EndOfRound();
         while (true)
         {
             DrawMap();
             DisplayDetails();
             ICommand command = inputController.GetCommand();
+            Console.Clear();
             command.Execute(this);
             TextRenderer.EndOfRound();
         }
@@ -31,7 +34,7 @@ public class Game
 
     private void DrawMap()
     {
-        for (int i = 0; i < map.mapRows; i++)
+        for (int i = map.mapRows-1; i >= 0; i--)
         {
 
             for (int ia = 0; ia < map.mapCols+1; ia++)
@@ -55,7 +58,7 @@ public class Game
                 if (j == map.mapCols - 1){TextRenderer.DrawMapAccent($" {i} ");}
 
                 //if at the end of last row, draw footer
-                if (i == map.mapRows - 1 && j == map.mapCols - 1) { DrawFooter(); }                
+                if (i == 0 && j == map.mapCols - 1) { DrawFooter(); }                
             }
             
             Console.WriteLine();
@@ -74,7 +77,7 @@ public class Game
         TextRenderer.DrawMap("|");
         for (int i = 0; i < map.mapCols; i++)
         {
-            TextRenderer.DrawMapAccent($@" {i} ");
+            TextRenderer.DrawMapAccent($@"{TextRenderer.CenterAlign($"{i}",3)}");
             TextRenderer.DrawMap("|");
         }
     }
@@ -228,6 +231,9 @@ public class Map
             case MapType.Default:
                 map = new Map(4, 4);
                 break;
+            case MapType.VeryBig:
+                map = new Map(10,10);
+                break;
             default:
                 map = new Map(4, 4);
                 break;
@@ -263,7 +269,7 @@ public class Map
 
     public bool CheckIfIsOnMap(Coordinate coord)
     {
-        if (coord.X >= 0 && coord.Y >= 0 && coord.X <= rooms.GetLength(0) && coord.Y <= rooms.GetLength(1))
+        if (coord.X >= 0 && coord.Y >= 0 && coord.X <= rooms.GetLength(0)-1 && coord.Y <= rooms.GetLength(1)-1)
         {
             return true;
         }
@@ -286,6 +292,7 @@ public class Map
 public enum MapType
 {
     Default,
+    VeryBig
 }
 public class Room
 {
@@ -354,6 +361,10 @@ public struct Coordinate
     }
 }
 
+
+
+
+
 public static class TextRenderer
 {
     public static void WriteLine(string text, ConsoleColor color = ConsoleColor.White)
@@ -408,6 +419,13 @@ public static class TextRenderer
     {
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine($"\n================================================================================\n");
+    }
+
+    public static string CenterAlign(string text, int width)
+    {
+        int spaces = width - text.Length;
+        int padLeft = spaces / 2 + text.Length;
+        return text.PadLeft(padLeft).PadRight(width);
     }
 }
 
