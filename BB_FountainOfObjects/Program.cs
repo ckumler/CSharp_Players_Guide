@@ -17,7 +17,7 @@ public class Game
         map = Map.CreateNewMap(inputController.GetMapType());
         player.currentPosition = map.entrancePos;
         
-        TextRenderer.EndOfRound();
+        TextRenderer.HorizontalRule();
         DrawMap();
         DisplayDetails();
         while (!gameOver)
@@ -26,7 +26,7 @@ public class Game
             ICommand command = inputController.GetCommand();
             Console.Clear();
             command.Execute(this);
-            TextRenderer.EndOfRound();
+            TextRenderer.HorizontalRule();
             DrawMap();
             DisplayDetails();
         }
@@ -242,18 +242,7 @@ public class InputController
                     {
                         case "H":
                         case "HELP":
-                            TextRenderer.WriteLine("\nYou enter the Cavern of Objects, a maze of rooms filled with dangerous pits in search of the Fountain of Objects. Light is visible only in the entrance, and no other light is seen anywhere in the caverns. You must navigate the Caverns with your other senses. Find the Fountain of Objects, activate it, and return to the entrance.");
-                            TextRenderer.WriteLine(@"
-Controls:
-    N or move north
-    S or move south
-    E or move east
-    W or move west
-
-    F or enable fountain
-
-    H or help
-   ");
+                            TextRenderer.HelpText();
                             continue;
                         case "N":
                             command = new MoveCommand(Direction.North);
@@ -641,6 +630,20 @@ public static class TextRenderer
     {
         TextRenderer.ErrorText("Please input a proper action. Type 'help' for help.");
     }    
+    public static void HelpText()
+    {
+        TextRenderer.WriteLine("\nYou enter the Cavern of Objects, a maze of rooms filled with dangerous pits in search of the Fountain of Objects.\nLight is visible only in the entrance, and no other light is seen anywhere in the caverns.\nYou must navigate the Caverns with your other senses.\nFind the Fountain of Objects, activate it, and return to the entrance.\nLook out for pits. You will feel a breeze if a pit is in an adjacent room. If you enter a room with a pit, you will die.");
+        TextRenderer.WriteLine(@"
+Controls:
+    N or move north
+    S or move south
+    E or move east
+    W or move west
+
+    F or enable fountain
+
+    H or help");
+    }
     public static void ActionText(string text, ConsoleColor color = ConsoleColor.DarkYellow)
     {
         Console.ForegroundColor = color;
@@ -667,7 +670,7 @@ public static class TextRenderer
         Console.ForegroundColor = color;
         Console.Write(text);
     }
-    public static void EndOfRound()
+    public static void HorizontalRule()
     {
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine($"\n================================================================================\n");
@@ -679,5 +682,6 @@ public static class TextRenderer
         int padLeft = spaces / 2 + text.Length;
         return text.PadLeft(padLeft).PadRight(width);
     }
+
 }
 
