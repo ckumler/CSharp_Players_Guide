@@ -1,25 +1,23 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-using System.Drawing;
-
-Game game = new Game();
+﻿Game game = new Game();
 game.Run();
 
 
 public class Game
 {
-    public bool playerEscaped = false;
+    public bool gameOver = false;
 
-    public Map map = Map.CreateNewMap(MapType.Medium, new Coordinate(0, 0), new Coordinate(0, 2));
+    public Map map = Map.CreateNewMap(MapType.Medium);
     public Player player = new Player();
     public InputController inputController = new InputController();
 
     public void Run()
     {
+        player.currentPosition = map.entrancePos;
         TextRenderer.ActionText("Welcome to The Fountain of Objects!");
         TextRenderer.EndOfRound();
         DrawMap();
         DisplayDetails();
-        while (!playerEscaped)
+        while (!gameOver)
         {
 
             ICommand command = inputController.GetCommand();
@@ -47,7 +45,7 @@ public class Game
             {
                 //TODO: Create a better way to detect if game is over
                 TextRenderer.ActionText($"The Fountain of Objects has been reactivated, and you have escaped with your life!\nYou win!");
-                playerEscaped = true;
+                gameOver = true;
             }
         }
        
@@ -62,12 +60,29 @@ public class Game
                 TextRenderer.ActionText($"You hear the rushing waters from the Fountain of Objects. It has been reactivated!");
             }
         }
-        
+
+        foreach (Coordinate pit in map.pitPosArray)
+        {
+            if (pit.X == player.currentPosition.X && pit.Y == player.currentPosition.Y)
+            {
+                //do pit logic
+                TextRenderer.ActionText($"You fell in to a pit!\nYou lose!");
+                gameOver = true;
+                break;
+            } else if (player.currentPosition.CheckIfNeighbor(pit))
+            {
+                TextRenderer.ActionText($"You feel a draft. There is a pit in a nearby room.");
+                //warn about pit
+                break;
+            }
+        }
+
         Console.WriteLine();
     }
 
     private void DrawMap()
     {
+        
         for (int i = map.mapRows - 1; i >= 0; i--)
         {
             //Draw top border
@@ -81,17 +96,40 @@ public class Game
             TextRenderer.DrawMap("|");
             for (int j = 0; j < map.mapCols; j++)
             {
+                
+                bool isPit = false;
+                foreach(Coordinate pit in map.pitPosArray)
+                {
+                    if (pit.X == j && pit.Y == i) {
+                        isPit = true; 
+                    }
+                }
+
+
                 if (i == player.currentPosition.Y && j == player.currentPosition.X)
                 {
-                    TextRenderer.DrawMapAccent($"{i},{j}");
+                    TextRenderer.DrawMapAccent(" @ ");
                 }
                 else if (i == map.entrancePos.Y && j == map.entrancePos.X)
                 {
-                    TextRenderer.DrawMapAccent($"{i},{j}");
+                    TextRenderer.DrawMapAccent(" E ");
                 }
                 else if (i == map.fountainPos.Y && j == map.fountainPos.X)
                 {
-                    TextRenderer.DrawMapAccent($"{i},{j}");
+                    if (map.fountainIsActivated) 
+                    {
+                        TextRenderer.DrawMapAccent(" F ");
+                    }
+                    else
+                    {
+                        TextRenderer.DrawMapAccent(" f ");
+                    }
+
+                    
+                }
+                else if(isPit)
+                {
+                    TextRenderer.DrawMapAccent($" P ");
                 }
                 else
                 {
@@ -155,8 +193,37 @@ public class InputController
             string[]? input = Console.ReadLine()?.ToLower().Split(" ") ?? new string[1] { "empty" };
             if (input.Length <= 1 || input.Length >= 3)
             {
-                TextRenderer.ErrorText("Please input a proper action");
-                continue;
+                // short inputs - single letter
+                if (input.Length == 1)
+                {
+                    switch (input[0]?.ToUpper() ?? " ")
+                    {
+                        case "N":
+                            command = new MoveCommand(Direction.North);
+                            break;
+                        case "E":
+                            command = new MoveCommand(Direction.East);
+                            break;
+                        case "S":
+                            command = new MoveCommand(Direction.South);
+                            break;
+                        case "W":
+                            command = new MoveCommand(Direction.West);
+                            break;
+                        case "F":
+                            command = new ActivateFountainCommand();
+                            break;
+
+                        default:
+                            TextRenderer.ErrorText("Please input a proper action");
+                            break;
+                    }
+                }
+                else
+                {
+                    TextRenderer.ErrorText("Please input a proper action");
+                    continue;
+                }
             }
             else if (input[0].ToLower() == "enable" && input[1].ToLower() == "fountain") {
                 command = new ActivateFountainCommand();
@@ -282,6 +349,7 @@ public class Map
     public int mapCols;
     public Coordinate entrancePos;
     public Coordinate fountainPos;
+    public Coordinate[] pitPosArray=[];
     public bool fountainIsActivated;
 
 
@@ -298,30 +366,50 @@ public class Map
         return rooms[coord.X, coord.Y].GetRoomType();
     }
 
-    public static Map CreateNewMap(MapType mapType, Coordinate entranceCoord, Coordinate fountainCoord)
+    public static Map CreateNewMap(MapType mapType)
     {
         const int SMALL_SIZE = 4;
         const int MEDIUM_SIZE = 6;
         const int LARGE_SIZE = 8;
         const int VERY_LARGE_SIZE = 10;
+        
         Map map;
+        Coordinate entranceCoord;
+        Coordinate fountainCoord;
+        Coordinate[] pitsCoords;
+
 
         switch (mapType)
         {
             case MapType.Small:
                 map = new Map(SMALL_SIZE, SMALL_SIZE);
+                entranceCoord = new Coordinate(0, 0);
+                fountainCoord = new Coordinate(3, 2);
+                pitsCoords = [new Coordinate(1, 2)];
                 break;
             case MapType.Medium:
                 map = new Map(MEDIUM_SIZE, MEDIUM_SIZE);
+                entranceCoord = new Coordinate(3, 0);
+                fountainCoord = new Coordinate(0, 5);
+                pitsCoords = [new Coordinate(2, 2), new Coordinate(4,4)];
                 break;
             case MapType.Large:
                 map = new Map(LARGE_SIZE, LARGE_SIZE);
+                entranceCoord = new Coordinate(0, 4);
+                fountainCoord = new Coordinate(2, 8);
+                pitsCoords = [new Coordinate(1, 1), new Coordinate(3, 6), new Coordinate(4, 3), new Coordinate(7, 7)];
                 break;
             case MapType.VeryLarge:
                 map = new Map(VERY_LARGE_SIZE, VERY_LARGE_SIZE);
+                entranceCoord = new Coordinate(5, 5);
+                fountainCoord = new Coordinate(1, 9);
+                pitsCoords = [new Coordinate(1, 1), new Coordinate(3, 1), new Coordinate(4,3), new Coordinate(4, 7), new Coordinate(6, 2), new Coordinate(7, 5), new Coordinate(8, 9), new Coordinate(9, 1)];
                 break;
             default:
                 map = new Map(MEDIUM_SIZE, MEDIUM_SIZE);
+                entranceCoord = new Coordinate(3, 0);
+                fountainCoord = new Coordinate(0, 5);
+                pitsCoords = [new Coordinate(2, 2), new Coordinate(4, 4)];
                 break;
         }
 
@@ -330,7 +418,7 @@ public class Map
         {
             for (int j = 0; j < map.mapCols; j++)
             {
-                // 0,0 is entrance :: 0,2 is fountain :: all others are empty
+                // place entrance, fountain and fill rest with empty
                 if (i == entranceCoord.X && j == entranceCoord.Y)
                 {
                     //Console.WriteLine($"{i},{j}: Entrance");
@@ -348,6 +436,17 @@ public class Map
                     //Console.WriteLine($"{i},{j}: Empty");
                     map.rooms[i, j] = new Room(new Coordinate(i, j), RoomType.Empty);
                 }
+            }
+        }
+
+        //add pits to map
+        map.pitPosArray = pitsCoords;
+        foreach (Coordinate pitCoord in pitsCoords)
+        {
+            if (pitCoord.X < map.mapRows && pitCoord.Y < map.mapCols)
+            {
+                //Console.WriteLine($"{i},{j}: Pit");
+                map.rooms[pitCoord.X, pitCoord.Y] = new Room(new Coordinate(pitCoord.X, pitCoord.Y), RoomType.Pit);
             }
         }
 
@@ -418,6 +517,7 @@ public enum RoomType
     Empty,
     Entrance,
     FountainRoom,
+    Pit,
 }
 
 public struct Coordinate
