@@ -6,14 +6,17 @@ public class Game
 {
     public bool gameOver = false;
 
-    public Map map = Map.CreateNewMap(MapType.Medium);
+    public Map map = Map.CreateNewMap(MapType.Default);
     public Player player = new Player();
     public InputController inputController = new InputController();
 
     public void Run()
     {
-        player.currentPosition = map.entrancePos;
         TextRenderer.ActionText("Welcome to The Fountain of Objects!");
+        //ask player what size map they would like to play
+        map = Map.CreateNewMap(inputController.GetMapType());
+        player.currentPosition = map.entrancePos;
+        
         TextRenderer.EndOfRound();
         DrawMap();
         DisplayDetails();
@@ -183,6 +186,44 @@ public class Player
 
 public class InputController
 {
+    public MapType GetMapType()
+    {
+        MapType? mapType = null;
+        while(mapType == null)
+        {
+            TextRenderer.AskText("What size map would you like to play (small, meduim, large, xlarge)? ");
+            string[]? input = Console.ReadLine()?.ToLower().Split(" ") ?? new string[1] { "empty" };
+            
+            switch (input[0]?.ToUpper() ?? " ")
+            {
+                case "SMALL":
+                case "S":
+                    mapType = MapType.Small;
+                    break;
+                case "MEDIUM":
+                case "M":
+                    mapType = MapType.Medium;
+                    break;
+                case "LARGE":
+                case "L":
+                    mapType = MapType.Large;
+                    break;
+                case "XLARGE":
+                case "XL":
+                    mapType = MapType.VeryLarge;
+                    break;
+
+                default:
+                    TextRenderer.ErrorText("Please input a proper size (S, M, L, XL)");
+                    break;
+            }
+        }
+        return mapType ?? MapType.Default;
+    }
+
+
+
+
     public ICommand GetCommand()
     {
         ICommand? command = null;
