@@ -74,8 +74,9 @@ public class Game
                 break;
             } else if (player.currentPosition.CheckIfNeighbor(pit))
             {
-                TextRenderer.ActionText($"You feel a draft. There is a pit in a nearby room.");
                 //warn about pit
+                TextRenderer.ActionText($"You feel a draft. There is a pit in a nearby room.");
+                //TextRenderer.DebugText($"player::{player.currentPosition} - pit::{pit}");
                 break;
             }
         }
@@ -234,11 +235,26 @@ public class InputController
             string[]? input = Console.ReadLine()?.ToLower().Split(" ") ?? new string[1] { "empty" };
             if (input.Length <= 1 || input.Length >= 3)
             {
-                // short inputs - single letter
+                // short inputs
                 if (input.Length == 1)
                 {
                     switch (input[0]?.ToUpper() ?? " ")
                     {
+                        case "H":
+                        case "HELP":
+                            TextRenderer.WriteLine("\nYou enter the Cavern of Objects, a maze of rooms filled with dangerous pits in search of the Fountain of Objects. Light is visible only in the entrance, and no other light is seen anywhere in the caverns. You must navigate the Caverns with your other senses. Find the Fountain of Objects, activate it, and return to the entrance.");
+                            TextRenderer.WriteLine(@"
+Controls:
+    N or move north
+    S or move south
+    E or move east
+    W or move west
+
+    F or enable fountain
+
+    H or help
+   ");
+                            continue;
                         case "N":
                             command = new MoveCommand(Direction.North);
                             break;
@@ -256,13 +272,13 @@ public class InputController
                             break;
 
                         default:
-                            TextRenderer.ErrorText("Please input a proper action");
-                            break;
+                            TextRenderer.ErrorTextProperAction();
+                            continue;
                     }
                 }
                 else
                 {
-                    TextRenderer.ErrorText("Please input a proper action");
+                    TextRenderer.ErrorTextProperAction();
                     continue;
                 }
             }
@@ -280,11 +296,11 @@ public class InputController
                             command = new MoveCommand(commandDirection);
                             break;
                         default:
-                            TextRenderer.ErrorText("Please input a proper action");
+                            TextRenderer.ErrorTextProperAction();
                             continue;
                     }
                 } else {
-                    TextRenderer.ErrorText("Please input a proper action");
+                    TextRenderer.ErrorTextProperAction();
                     continue;
                 }
             }
@@ -585,7 +601,7 @@ public struct Coordinate
 
     public bool CheckIfNeighbor(Coordinate coord)
     {
-        if (coord.X == X - 1 || coord.Y == Y - 1 || coord.X == X + 1 || coord.Y == Y + 1)
+        if ((Math.Abs(coord.X - X) <= 1) && (Math.Abs(coord.Y - Y) <= 1))
         {
             return true;
         }
@@ -621,6 +637,10 @@ public static class TextRenderer
         Console.ForegroundColor = color;
         Console.WriteLine("ERROR: " + text);
     }
+    public static void ErrorTextProperAction()
+    {
+        TextRenderer.ErrorText("Please input a proper action. Type 'help' for help.");
+    }    
     public static void ActionText(string text, ConsoleColor color = ConsoleColor.DarkYellow)
     {
         Console.ForegroundColor = color;
